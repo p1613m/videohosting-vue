@@ -5,6 +5,7 @@ import LoginView from "@/views/LoginView.vue";
 import CreateView from "@/views/CreateView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import VideoView from "@/views/VideoView.vue";
+import {getUserProfile} from "@/use/functions";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,12 +28,18 @@ const router = createRouter({
     {
       path: '/create',
       name: 'create',
-      component: CreateView
+      component: CreateView,
+      meta: {
+        requiredAuth: true
+      }
     },
     {
       path: '/profile',
       name: 'profile',
-      component: ProfileView
+      component: ProfileView,
+      meta: {
+        requiredAuth: true
+      }
     },
     {
       path: '/video/:id',
@@ -40,6 +47,16 @@ const router = createRouter({
       component: VideoView
     }
   ]
+})
+
+router.beforeEach(async to => {
+  const user = await getUserProfile()
+
+  if(to.meta.requiredAuth && !user) {
+    return {
+      name: 'login'
+    }
+  }
 })
 
 export default router

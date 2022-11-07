@@ -1,34 +1,52 @@
 <template>
   <h1 class="mb-5">Registration</h1>
-  <form action="#">
-    <div class="form-group mb-3">
-      <label>Name</label>
-      <input class="form-control" type="text" placeholder="Your name">
-    </div>
-    <div class="form-group mb-3">
-      <label>E-Mail</label>
-      <input class="form-control" type="email" placeholder="Your email">
-    </div>
-    <div class="form-group mb-3">
-      <label>Password</label>
-      <input class="form-control" type="password" placeholder="Your password">
-    </div>
-    <div class="form-group mb-3">
-      <label>Password repeat</label>
-      <input class="form-control" type="password" placeholder="Your password repeat">
-    </div>
-    <div class="form-group">
-      <input type="submit" class="btn btn-primary" value="Register">
-    </div>
+  <form action="#" @submit.prevent="sendForm()" novalidate>
+    <BaseInput label="Name" placeholder="Your name"
+               v-model="form.username"
+               :error="errors.username"
+    />
+    <BaseInput label="E-Mail" placeholder="Your email" type="email"
+               v-model="form.email"
+               :error="errors.email"
+    />
+    <BaseInput label="Password" placeholder="Your password" type="password"
+               v-model="form.password"
+               :error="errors.password"
+    />
+    <BaseInput label="Password repeat" placeholder="Your password repeat" type="password"
+               v-model="form.password_confirmation"
+    />
+    <Submit value="Register" />
   </form>
 </template>
 
 <script>
+import {ref} from "vue";
+import {sendRegistration} from "@/router/requests";
+import BaseInput from "@/components/form/BaseInput.vue";
+import router from "@/router";
+import Submit from "@/components/form/Submit.vue";
+
 export default {
-  name: "RegistrationView"
+  name: "RegistrationView",
+  components: {Submit, BaseInput},
+  setup() {
+    const form = ref({});
+    const errors = ref({});
+
+    const sendForm = async () => {
+      errors.value = {};
+
+      const { body, code } = await sendRegistration(form.value)
+
+      if(code === 201) {
+        return router.push({name: 'login'})
+      }
+
+      errors.value = body.errors
+    }
+
+    return { form, sendForm, errors }
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

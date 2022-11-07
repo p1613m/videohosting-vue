@@ -11,37 +11,37 @@
         Home
       </RouterLink>
     </li>
-    <li>
+    <li v-if="user">
       <a href="index.html" class="nav-link text-white">
         <i class="fa-solid fa-video"></i>
         My videos
       </a>
     </li>
-    <li>
+    <li v-if="user">
       <RouterLink :to="{name: 'profile'}" class="nav-link text-white">
         <i class="fa-solid fa-user"></i>
         My Profile
       </RouterLink>
     </li>
-    <li>
+    <li v-if="user">
       <RouterLink :to="{name: 'create'}" class="nav-link text-white">
         <i class="fa-solid fa-plus"></i>
         Add video
       </RouterLink>
     </li>
-    <li>
-      <a href="#" class="nav-link text-white">
+    <li v-if="user">
+      <a href="#" @click.prevent="logout()" class="nav-link text-white">
         <i class="fa-solid fa-right-from-bracket"></i>
         Logout
       </a>
     </li>
-    <li>
+    <li v-if="!user">
       <RouterLink :to="{name: 'login'}" class="nav-link text-white">
         <i class="fa-solid fa-user"></i>
         Login
       </RouterLink>
     </li>
-    <li>
+    <li v-if="!user">
       <RouterLink :to="{name: 'registration'}" class="nav-link text-white">
         <i class="fa-solid fa-user"></i>
         Register
@@ -51,11 +51,16 @@
 </template>
 
 <script>
+import {inject} from "vue";
+
 export default {
-  name: "Sidebar"
+  name: "Sidebar",
+
+  setup() {
+    const user = inject('user')
+    const logout = inject('logout')
+
+    return { user, logout }
+  }
 }
 </script>
-
-<style scoped>
-
-</style>
