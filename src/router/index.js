@@ -6,6 +6,7 @@ import CreateView from "@/views/CreateView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import VideoView from "@/views/VideoView.vue";
 import {getUserProfile} from "@/use/functions";
+import MyVideosView from "@/views/MyVideosView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/video/:id/edit',
+      name: 'video-edit',
+      component: CreateView,
+      meta: {
+        requiredAuth: true
+      }
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: ProfileView,
@@ -45,6 +54,14 @@ const router = createRouter({
       path: '/video/:id',
       name: 'video',
       component: VideoView
+    },
+    {
+      path: '/my-videos',
+      name: 'my-videos',
+      component: MyVideosView,
+      meta: {
+        requiredAuth: true
+      }
     }
   ]
 })

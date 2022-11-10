@@ -16,3 +16,13 @@ export async function getUserProfile() {
 
     return user
 }
+
+export function convertFormData(data) {
+    const formData = new FormData()
+
+    for(const name in data) {
+        formData.append(name, data[name])
+    }
+
+    return formData
+}
